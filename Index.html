@@ -7,7 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Supabase Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -333,6 +336,12 @@
   </div>
 
   <script>
+    // --- SUPABASE CONFIGURATIE ---
+    const SUPABASE_URL = 'https://smouxmnyhcuooofqskrb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtb3V4bW55aGN1b29vZnFza3JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MTcxMjUsImV4cCI6MjEwNTk5MzEyNX0.fUrftF1fA6Jr13j8CwEUEjJANixq7ruzsvetgw4TXhw'; // <-- Vul hier jouw anon public key in!
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     lucide.createIcons();
 
     // Default Site Config
@@ -416,27 +425,45 @@
       });
     }
 
-    // Verzenden RSVP
-    function handleRSVPSubmit(e) {
+    // Verzenden RSVP direct naar Supabase
+    async function handleRSVPSubmit(e) {
       e.preventDefault();
-      const submission = { id: Date.now(), submittedAt: new Date().toISOString(), answers: {} };
 
+      const answers = {};
       formFields.forEach(field => {
         if (field.type === 'radio') {
           const checked = document.querySelector(`input[name="${field.id}"]:checked`);
-          submission.answers[field.id] = checked ? checked.value : '';
+          answers[field.id] = checked ? checked.value : '';
         } else if (field.type === 'checkbox') {
           const chk = document.getElementById(field.id);
-          submission.answers[field.id] = chk && chk.checked ? 'Ja' : 'Nee';
+          answers[field.id] = chk && chk.checked ? 'Ja' : 'Nee';
         } else {
           const el = document.getElementById(field.id);
-          submission.answers[field.id] = el ? el.value : '';
+          answers[field.id] = el ? el.value : '';
         }
       });
 
-      guestSubmissions.push(submission);
-      localStorage.setItem('weddingSubmissions', JSON.stringify(guestSubmissions));
+      // Data opslaan in de Supabase tabel 'rsvp_submissions'
+      const { data, error } = await supabaseClient
+        .from('rsvp_submissions')
+        .insert([
+          {
+            full_name: answers['f_name'] || '',
+            email: answers['f_email'] || '',
+            attending: answers['f_attending'] || '',
+            guest_count: parseInt(answers['f_count']) || 1,
+            dietary: answers['f_dietary'] || '',
+            song_request: answers['f_song'] || ''
+          }
+        ]);
 
+      if (error) {
+        console.error('Fout bij opslaan in Supabase:', error);
+        alert('Er is een fout opgetreden bij het verzenden: ' + error.message);
+        return;
+      }
+
+      // Bij succes: verberg formulier en toon bedankbericht
       document.getElementById('rsvpForm').classList.add('hidden');
       document.getElementById('successMsg').classList.remove('hidden');
     }
