@@ -45,7 +45,8 @@
             sans: ['Montserrat', 'sans-serif']
           },
           boxShadow: {
-            soft: '0 20px 60px rgba(18, 31, 39, 0.10)'
+            soft: '0 20px 60px rgba(18, 31, 39, 0.10)',
+            glow: '0 10px 30px -5px rgba(200, 125, 85, 0.3)'
           }
         }
       }
@@ -59,10 +60,11 @@
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #FAF8F5; }
     ::-webkit-scrollbar-thumb { background: #D6C4A5; border-radius: 999px; }
+    
     .glass-nav {
-      background: rgba(250, 248, 245, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(250, 248, 245, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
     .glass-card {
       background: rgba(255, 255, 255, 0.92);
@@ -73,6 +75,19 @@
     .bg-coastal-dark { background: linear-gradient(135deg, #1C2D37 0%, #2A434D 100%); }
     .hero-image { background-position: center; background-size: cover; }
     .mobile-menu-open { display: flex !important; }
+    
+    /* Modern Scroll Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     input, textarea, select, button { font: inherit; }
     button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
       outline: 3px solid rgba(200, 125, 85, 0.35);
@@ -80,20 +95,22 @@
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
     }
   </style>
 </head>
 
 <body class="bg-sand-50 text-ocean-800 font-sans antialiased">
-  <nav class="fixed inset-x-0 top-0 z-40 glass-nav border-b border-sand-200/70" aria-label="Hoofdnavigatie">
+  <nav class="fixed inset-x-0 top-0 z-40 glass-nav border-b border-sand-200/70 transition-all duration-300" aria-label="Hoofdnavigatie">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
-      <a href="#top" class="font-serif text-2xl font-semibold tracking-wider text-ocean-800 flex items-center gap-2" aria-label="Naar boven">
+      <a href="#top" class="font-serif text-2xl font-semibold tracking-wider text-ocean-800 flex items-center gap-2 hover:opacity-80 transition" aria-label="Naar boven">
         R <span class="text-terracotta text-xl font-light">&amp;</span> M
       </a>
 
       <div class="hidden lg:flex items-center gap-7 text-[11px] uppercase tracking-[0.16em] font-semibold text-ocean-800/75">
         <a href="#ons-verhaal" class="hover:text-terracotta transition">Ons verhaal</a>
         <a href="#programma" class="hover:text-terracotta transition">Programma</a>
+        <a href="#kinderen" class="hover:text-terracotta transition">Kinderen</a>
         <a href="#locatie" class="hover:text-terracotta transition">Locatie</a>
         <a href="#cadeautip" class="hover:text-terracotta transition">Cadeautip</a>
         <a href="#overnachten" class="hover:text-terracotta transition">Overnachten</a>
@@ -103,7 +120,7 @@
         <button type="button" onclick="openAdminModal()" class="hidden sm:inline-flex p-2 text-ocean-800/55 hover:text-terracotta rounded-full hover:bg-sand-100 transition" title="Beheerderspaneel" aria-label="Open beheerderspaneel">
           <i data-lucide="lock" class="w-4 h-4"></i>
         </button>
-        <a href="#rsvp" class="bg-terracotta text-white px-4 sm:px-5 py-2.5 rounded-full text-[11px] font-semibold uppercase tracking-wider hover:bg-terracotta-hover shadow-md transition">RSVP</a>
+        <a href="#rsvp" class="bg-terracotta text-white px-5 py-2.5 rounded-full text-[11px] font-semibold uppercase tracking-wider hover:bg-terracotta-hover shadow-md hover:shadow-glow transition-all duration-300 transform hover:-translate-y-0.5">RSVP</a>
         <button type="button" id="mobileMenuButton" onclick="toggleMobileMenu()" class="lg:hidden p-2 text-ocean-800 rounded-full hover:bg-sand-100" aria-label="Open menu" aria-expanded="false">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
@@ -113,6 +130,7 @@
     <div id="mobileMenu" class="hidden lg:hidden flex-col px-5 pb-5 pt-1 bg-sand-50/95 border-t border-sand-200 text-sm font-medium">
       <a onclick="closeMobileMenu()" href="#ons-verhaal" class="py-3 border-b border-sand-200/70">Ons verhaal</a>
       <a onclick="closeMobileMenu()" href="#programma" class="py-3 border-b border-sand-200/70">Programma</a>
+      <a onclick="closeMobileMenu()" href="#kinderen" class="py-3 border-b border-sand-200/70">Kinderen</a>
       <a onclick="closeMobileMenu()" href="#locatie" class="py-3 border-b border-sand-200/70">Locatie &amp; parkeren</a>
       <a onclick="closeMobileMenu()" href="#cadeautip" class="py-3 border-b border-sand-200/70">Cadeautip</a>
       <a onclick="closeMobileMenu()" href="#overnachten" class="py-3">Overnachten</a>
@@ -121,11 +139,11 @@
 
   <main>
     <section id="top" class="relative min-h-[100svh] flex items-center justify-center pt-28 pb-16 px-5 sm:px-6 overflow-hidden bg-coastal-dark text-white">
-      <div class="absolute inset-0 hero-image opacity-45" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=85&w=1800');"></div>
+      <div class="absolute inset-0 hero-image opacity-45 transform scale-105 transition-transform duration-10000 ease-out" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=85&w=1800');"></div>
       <div class="absolute inset-0 bg-gradient-to-t from-ocean-900 via-ocean-900/45 to-ocean-900/65"></div>
 
-      <div class="relative z-10 text-center max-w-5xl mx-auto space-y-7 sm:space-y-8">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-sand-200">
+      <div class="relative z-10 text-center max-w-5xl mx-auto space-y-7 sm:space-y-8 reveal active">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-sand-200 shadow-sm">
           <i data-lucide="waves" class="w-3.5 h-3.5 text-terracotta"></i>
           Castricum aan Zee
         </div>
@@ -163,7 +181,7 @@
         </div>
 
         <div class="pt-1">
-          <a href="#rsvp" class="inline-flex items-center gap-2 bg-terracotta text-white px-7 sm:px-8 py-4 rounded-full text-[11px] font-semibold uppercase tracking-wider hover:bg-terracotta-hover shadow-lg transition hover:-translate-y-0.5">
+          <a href="#rsvp" class="inline-flex items-center gap-2 bg-terracotta text-white px-8 py-4 rounded-full text-[11px] font-semibold uppercase tracking-wider hover:bg-terracotta-hover shadow-lg hover:shadow-glow transition-all duration-300 transform hover:-translate-y-1">
             Laat weten of je erbij bent
             <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
           </a>
@@ -171,55 +189,55 @@
       </div>
     </section>
 
-    <section id="ons-verhaal" class="scroll-mt-24 py-20 sm:py-24 px-5 sm:px-6">
-      <div class="max-w-4xl mx-auto text-center space-y-6">
+    <section id="ons-verhaal" class="scroll-mt-24 py-20 sm:py-28 px-5 sm:px-6">
+      <div class="max-w-4xl mx-auto text-center space-y-6 reveal">
         <span class="text-xs uppercase tracking-[0.22em] font-bold text-terracotta block">Eindelijk is het zover</span>
-        <h2 class="font-serif text-4xl sm:text-5xl text-ocean-800 font-normal">Wij gaan trouwen</h2>
-        <div class="w-12 h-0.5 bg-terracotta mx-auto"></div>
+        <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-ocean-800 font-normal">Wij gaan trouwen</h2>
+        <div class="w-12 h-0.5 bg-terracotta mx-auto rounded-full"></div>
         <p class="text-slate-600 text-lg sm:text-xl font-light leading-relaxed max-w-2xl mx-auto pt-2">
           Zeven jaar samen, vijf jaar verloofd, drie huizen verder en drie mooie kinderen later is het eindelijk zover. Wij gaan trouwen en vieren deze bijzondere dag heel graag samen met jullie.
         </p>
       </div>
     </section>
 
-    <section id="programma" class="scroll-mt-24 py-20 sm:py-24 bg-sand-100/70 border-y border-sand-200/50">
+    <section id="programma" class="scroll-mt-24 py-20 sm:py-28 bg-sand-100/70 border-y border-sand-200/50">
       <div class="max-w-6xl mx-auto px-5 sm:px-6">
-        <div class="text-center mb-12 sm:mb-16 space-y-3">
+        <div class="text-center mb-12 sm:mb-16 space-y-3 reveal">
           <span class="text-xs uppercase tracking-[0.22em] font-bold text-terracotta block">Dagplanning</span>
           <h2 class="font-serif text-4xl sm:text-5xl text-ocean-800">Het programma</h2>
           <p class="text-slate-500 text-sm">Vrijdag 27 augustus 2027</p>
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-          <article class="glass-card h-full p-6 rounded-2xl text-center space-y-3 hover:-translate-y-1 hover:shadow-lg hover:border-terracotta/40 transition duration-300">
+          <article class="glass-card h-full p-6 rounded-3xl text-center space-y-3 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 reveal">
             <div class="w-12 h-12 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center mx-auto"><i data-lucide="coffee" class="w-5 h-5"></i></div>
             <time class="font-serif text-2xl font-light text-ocean-800 block">15:00</time>
             <h3 class="font-semibold text-ocean-800 text-sm">Ontvangst</h3>
             <p class="text-xs text-slate-500 leading-relaxed">Welkom met een drankje op het terras aan het strand.</p>
           </article>
 
-          <article class="glass-card h-full p-6 rounded-2xl text-center space-y-3 hover:-translate-y-1 hover:shadow-lg hover:border-terracotta/40 transition duration-300">
+          <article class="glass-card h-full p-6 rounded-3xl text-center space-y-3 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 reveal">
             <div class="w-12 h-12 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center mx-auto"><i data-lucide="heart" class="w-5 h-5"></i></div>
             <time class="font-serif text-2xl font-light text-ocean-800 block">15:30</time>
             <h3 class="font-semibold text-ocean-800 text-sm">Ceremonie</h3>
             <p class="text-xs text-slate-500 leading-relaxed">Het officiële jawoord met uitzicht op de Noordzee.</p>
           </article>
 
-          <article class="glass-card h-full p-6 rounded-2xl text-center space-y-3 hover:-translate-y-1 hover:shadow-lg hover:border-terracotta/40 transition duration-300">
+          <article class="glass-card h-full p-6 rounded-3xl text-center space-y-3 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 reveal">
             <div class="w-12 h-12 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center mx-auto"><i data-lucide="wine" class="w-5 h-5"></i></div>
             <time class="font-serif text-2xl font-light text-ocean-800 block">16:30</time>
             <h3 class="font-semibold text-ocean-800 text-sm">Proost &amp; taart</h3>
             <p class="text-xs text-slate-500 leading-relaxed">Tijd voor bubbels, taart en gezelligheid op het terras.</p>
           </article>
 
-          <article class="glass-card h-full p-6 rounded-2xl text-center space-y-3 hover:-translate-y-1 hover:shadow-lg hover:border-terracotta/40 transition duration-300">
+          <article class="glass-card h-full p-6 rounded-3xl text-center space-y-3 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 reveal">
             <div class="w-12 h-12 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center mx-auto"><i data-lucide="utensils" class="w-5 h-5"></i></div>
             <time class="font-serif text-2xl font-light text-ocean-800 block">18:00</time>
             <h3 class="font-semibold text-ocean-800 text-sm">Beach dinner</h3>
             <p class="text-xs text-slate-500 leading-relaxed">Samen sfeervol dineren aan zee.</p>
           </article>
 
-          <article class="glass-card h-full p-6 rounded-2xl text-center space-y-3 hover:-translate-y-1 hover:shadow-lg hover:border-terracotta/40 transition duration-300 sm:col-span-2 lg:col-span-1">
+          <article class="glass-card h-full p-6 rounded-3xl text-center space-y-3 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 sm:col-span-2 lg:col-span-1 reveal">
             <div class="w-12 h-12 rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center mx-auto"><i data-lucide="music" class="w-5 h-5"></i></div>
             <time class="font-serif text-2xl font-light text-ocean-800 block">20:30</time>
             <h3 class="font-semibold text-ocean-800 text-sm">Feest</h3>
@@ -229,10 +247,61 @@
       </div>
     </section>
 
-    <section id="locatie" class="scroll-mt-24 py-20 sm:py-24 bg-white">
+    <!-- NIEUWE SECTIE: VOOR DE KLEINE GASTEN -->
+    <section id="kinderen" class="scroll-mt-24 py-20 sm:py-28 bg-white border-b border-sand-200/50">
+      <div class="max-w-6xl mx-auto px-5 sm:px-6">
+        <div class="text-center mb-12 sm:mb-16 space-y-3 reveal">
+          <span class="text-xs uppercase tracking-[0.22em] font-bold text-terracotta block">Iedereen is welkom</span>
+          <h2 class="font-serif text-4xl sm:text-5xl text-ocean-800">Voor de kleine gasten</h2>
+          <p class="text-slate-600 text-base font-light max-w-2xl mx-auto">
+            Ook aan onze kleinste bezoekers is gedacht! We maken er voor jong en oud een fantastische dag van aan het strand.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-4 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 reveal">
+            <div class="w-12 h-12 rounded-2xl bg-terracotta/10 text-terracotta flex items-center justify-center">
+              <i data-lucide="palmtree" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif text-2xl text-ocean-800">Spelen op het strand</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Met het zand tussen de tenen en de zee voor de deur is er genoeg ruimte om lekker te rennen, zandkasteeltjes te bouwen en uit te razen.
+            </p>
+          </article>
+
+          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-4 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 reveal">
+            <div class="w-12 h-12 rounded-2xl bg-terracotta/10 text-terracotta flex items-center justify-center">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif text-2xl text-ocean-800">Kids Corner &amp; Kleuren</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Er staat binnen een gezellige speelhoek klaar met kleurplaten, spelletjes en knutselspullen voor als de beentjes even moe zijn.
+            </p>
+          </article>
+
+          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-4 hover:-translate-y-1.5 hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 sm:col-span-2 lg:col-span-1 reveal">
+            <div class="w-12 h-12 rounded-2xl bg-terracotta/10 text-terracotta flex items-center justify-center">
+              <i data-lucide="ice-cream" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif text-2xl text-ocean-800">Kindermenu &amp; IJsjes</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Tijdens het diner zorgen we voor een kindvriendelijk menu en natuurlijk een heerlijk ijsje als toetje.
+            </p>
+          </article>
+        </div>
+
+        <div class="mt-10 p-6 rounded-2xl bg-sand-50 border border-sand-200 text-center max-w-3xl mx-auto reveal">
+          <p class="text-xs sm:text-sm text-slate-600">
+            <strong class="text-ocean-800">Handig om te weten voor ouders:</strong> Er is een rustige ruimte aanwezig op locatie om eventueel te verschonen of even de rust op te zoeken.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="locatie" class="scroll-mt-24 py-20 sm:py-28 bg-sand-50">
       <div class="max-w-6xl mx-auto px-5 sm:px-6">
         <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div class="space-y-7">
+          <div class="space-y-7 reveal">
             <div class="space-y-3">
               <span class="text-xs uppercase tracking-[0.22em] font-bold text-terracotta block">De locatie</span>
               <h2 class="font-serif text-4xl sm:text-5xl text-ocean-800 leading-tight">Strandpaviljoen Zoomers</h2>
@@ -242,9 +311,9 @@
             </div>
 
             <div class="grid sm:grid-cols-2 gap-4">
-              <a href="https://maps.google.com/?q=Strandpaviljoen+Zoomers+Castricum" target="_blank" rel="noopener noreferrer" class="group block p-5 rounded-2xl bg-sand-50 border border-sand-200 hover:border-terracotta/60 hover:shadow-lg transition">
+              <a href="https://maps.google.com/?q=Strandpaviljoen+Zoomers+Castricum" target="_blank" rel="noopener noreferrer" class="group block p-5 rounded-2xl bg-white border border-sand-200 hover:border-terracotta/60 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 <div class="flex items-start gap-4">
-                  <div class="w-11 h-11 rounded-xl bg-terracotta/10 text-terracotta flex items-center justify-center shrink-0 group-hover:bg-terracotta group-hover:text-white transition"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                  <div class="w-11 h-11 rounded-xl bg-terracotta/10 text-terracotta flex items-center justify-center shrink-0 group-hover:bg-terracotta group-hover:text-white transition-colors duration-300"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
                   <div class="min-w-0">
                     <h3 class="font-semibold text-ocean-800 text-sm">Strandpaviljoen Zoomers</h3>
                     <p class="text-xs text-slate-500 leading-relaxed mt-1">Zeeweg 82<br>1901 NZ Castricum</p>
@@ -253,9 +322,9 @@
                 </div>
               </a>
 
-              <a href="https://www.google.com/maps/search/?api=1&amp;query=Parkeerterrein+P+aan+Zee+Zeeweg+Castricum" target="_blank" rel="noopener noreferrer" class="group block p-5 rounded-2xl bg-sand-50 border border-sand-200 hover:border-terracotta/60 hover:shadow-lg transition">
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=Parkeerterrein+P+aan+Zee+Zeeweg+Castricum" target="_blank" rel="noopener noreferrer" class="group block p-5 rounded-2xl bg-white border border-sand-200 hover:border-terracotta/60 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 <div class="flex items-start gap-4">
-                  <div class="w-11 h-11 rounded-xl bg-ocean-800 text-white flex items-center justify-center shrink-0 group-hover:bg-ocean-500 transition"><i data-lucide="car" class="w-5 h-5"></i></div>
+                  <div class="w-11 h-11 rounded-xl bg-ocean-800 text-white flex items-center justify-center shrink-0 group-hover:bg-ocean-500 transition-colors duration-300"><i data-lucide="car" class="w-5 h-5"></i></div>
                   <div class="min-w-0">
                     <h3 class="font-semibold text-ocean-800 text-sm">Parkeren bij P aan Zee</h3>
                     <p class="text-xs text-slate-500 leading-relaxed mt-1">Vanaf het parkeerterrein loop je via de duinovergang naar het strandpaviljoen.</p>
@@ -266,10 +335,10 @@
             </div>
           </div>
 
-          <div class="relative">
+          <div class="relative reveal">
             <div class="absolute -inset-3 bg-sand-200/50 rounded-[2rem]"></div>
             <div class="relative overflow-hidden rounded-[1.75rem] shadow-2xl aspect-[16/10] lg:aspect-[4/3]">
-              <img src="https://strandpaviljoenzoomers.nl/wp-content/uploads/2024/03/Foto-trouwen-TessEvenboerPhotography-Strandpaviljoen-Zoomers.jpg.webp" alt="Trouwen bij Strandpaviljoen Zoomers in Castricum aan Zee" class="w-full h-full object-cover" loading="lazy">
+              <img src="https://strandpaviljoenzoomers.nl/wp-content/uploads/2024/03/Foto-trouwen-TessEvenboerPhotography-Strandpaviljoen-Zoomers.jpg.webp" alt="Trouwen bij Strandpaviljoen Zoomers in Castricum aan Zee" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-ocean-900/90 via-ocean-900/20 to-transparent"></div>
               <div class="absolute left-4 right-4 sm:left-5 sm:right-5 bottom-4 sm:bottom-5">
                 <div class="bg-white/95 backdrop-blur-xl rounded-2xl p-5 shadow-2xl border border-white/50">
@@ -288,8 +357,8 @@
       </div>
     </section>
 
-    <section id="cadeautip" class="scroll-mt-24 py-20 sm:py-24 bg-sand-100/70 border-y border-sand-200/60">
-      <div class="max-w-3xl mx-auto px-5 sm:px-6 text-center">
+    <section id="cadeautip" class="scroll-mt-24 py-20 sm:py-28 bg-sand-100/70 border-y border-sand-200/60">
+      <div class="max-w-3xl mx-auto px-5 sm:px-6 text-center reveal">
         <div class="bg-white p-8 sm:p-12 rounded-3xl shadow-xl shadow-ocean-900/5 border border-sand-200 relative overflow-hidden">
           <div class="absolute -top-16 -right-16 w-40 h-40 bg-terracotta/5 rounded-full"></div>
           <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-sand-200/50 rounded-full"></div>
@@ -308,47 +377,48 @@
       </div>
     </section>
 
-    <section id="overnachten" class="scroll-mt-24 py-20 sm:py-24">
+    <section id="overnachten" class="scroll-mt-24 py-20 sm:py-28">
       <div class="max-w-6xl mx-auto px-5 sm:px-6">
-        <div class="text-center mb-12 space-y-3">
+        <div class="text-center mb-12 space-y-3 reveal">
           <span class="text-xs uppercase tracking-[0.22em] font-bold text-terracotta block">Blijven slapen?</span>
           <h2 class="font-serif text-4xl sm:text-5xl text-ocean-800">Overnachten in de buurt</h2>
           <p class="text-sm text-slate-500 max-w-xl mx-auto">Drie fijne mogelijkheden in de omgeving van Zoomers.</p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-6">
-          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition border-t-4 border-t-terracotta">
+          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 border-t-4 border-t-terracotta reveal">
             <div class="space-y-3">
               <span class="inline-block px-3 py-1 rounded-full bg-sand-200/60 text-ocean-800 text-[10px] uppercase tracking-widest font-bold">Duin &amp; bos</span>
               <h3 class="font-serif text-2xl text-ocean-800">Kamers bij het Bos</h3>
               <p class="text-sm text-slate-600 leading-relaxed">Een hotel aan de rand van het Noordhollands Duinreservaat, op korte fiets- of autorit van het strand.</p>
             </div>
-            <a href="https://zoomersaanhetbos.nl/kamers/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ocean-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-ocean-500 transition shadow-md">Bekijk kamers <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+            <a href="https://zoomersaanhetbos.nl/kamers/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ocean-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-ocean-500 transition-colors shadow-md">Bekijk kamers <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
           </article>
 
-          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition border-t-4 border-t-terracotta">
+          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 border-t-4 border-t-terracotta reveal">
             <div class="space-y-3">
               <span class="inline-block px-3 py-1 rounded-full bg-sand-200/60 text-ocean-800 text-[10px] uppercase tracking-widest font-bold">Aan het strand</span>
               <h3 class="font-serif text-2xl text-ocean-800">Hotelkamers aan Zee</h3>
               <p class="text-sm text-slate-600 leading-relaxed">Hotelkamers direct aan de duinovergang, op korte afstand van het feest.</p>
             </div>
-            <a href="https://zoomersaanzee.nl/hotelkamers-aan-zee/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ocean-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-ocean-500 transition shadow-md">Bekijk kamers <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+            <a href="https://zoomersaanzee.nl/hotelkamers-aan-zee/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ocean-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-ocean-500 transition-colors shadow-md">Bekijk kamers <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
           </article>
 
-          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition border-t-4 border-t-terracotta">
+          <article class="glass-card p-7 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 border-t-4 border-t-terracotta reveal">
             <div class="space-y-3">
               <span class="inline-block px-3 py-1 rounded-full bg-sand-200/60 text-ocean-800 text-[10px] uppercase tracking-widest font-bold">Op het strand</span>
               <h3 class="font-serif text-2xl text-ocean-800">Strandhuisjes</h3>
               <p class="text-sm text-slate-600 leading-relaxed">Overnacht met de voeten in het zand en word wakker met het geluid van de zee.</p>
             </div>
-            <a href="https://zoomersaanzee.nl/strandhuisjes/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ocean-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-ocean-500 transition shadow-md">Bekijk strandhuisjes <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+            <a href="https://zoomersaanzee.nl/strandhuisjes/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ocean-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-ocean-500 transition-colors shadow-md">Bekijk strandhuisjes <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="rsvp" class="scroll-mt-20 py-20 sm:py-24 bg-coastal-dark text-white relative">
-      <div class="max-w-3xl mx-auto px-5 sm:px-6">
+    <!-- RSVP SECTIE (VOLLEDIG INTACT GEHOUDEN) -->
+    <section id="rsvp" class="scroll-mt-20 py-20 sm:py-28 bg-coastal-dark text-white relative">
+      <div class="max-w-3xl mx-auto px-5 sm:px-6 reveal">
         <div class="text-center mb-10 sm:mb-12 space-y-3">
           <span class="text-xs uppercase tracking-[0.22em] font-bold text-sand-300 block">Aanmelden</span>
           <h2 class="font-serif text-4xl sm:text-5xl text-sand-50">Geef je RSVP door</h2>
@@ -431,7 +501,7 @@
             </div>
           </div>
 
-          <button type="submit" class="w-full bg-terracotta text-white py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-terracotta-hover transition shadow-xl">Verstuur bevestiging</button>
+          <button type="submit" class="w-full bg-terracotta text-white py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-terracotta-hover transition shadow-xl hover:shadow-glow">Verstuur bevestiging</button>
           <p class="text-[10px] text-center text-slate-400 leading-relaxed">Je gegevens worden veilig opgeslagen voor onze gastenlijst.</p>
         </form>
 
@@ -520,7 +590,7 @@
   <script>
     // --- SUPABASE CONFIGURATIE ---
     const SUPABASE_URL = 'https://smouxmnyhcuooofqskrb.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtb3V4bW55aGN1b29vZnFza3JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MTcxMjUsImV4cCI6MjEwNTk5MzEyNX0.fUrftF1fA6Jr13j8CwEUEjJANixq7ruzsvetgw4TXhw';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtb3V4bW55aGN1b29vZnFza3JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MTcxMjUsImV4cCI6MjA1NTk2MTY5MH0.fUrftF1fA6Jr13j8CwEUEjJANixq7ruzsvetgw4TXhw';
     
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let isAttending = true, adultsCount = 1, kidsCount = 0, submissions = [];
@@ -586,6 +656,20 @@
     async function deleteSubmission(id){if(!confirm('Weet je zeker dat je deze inzending wilt verwijderen?'))return;const{error}=await supabaseClient.from('rsvp_submissions').delete().eq('id',id);if(error){alert(`Verwijderen is niet gelukt: ${error.message}`);return;}submissions=submissions.filter(x=>Number(x.id)!==Number(id));renderAdminTable();}
     function exportToCSV(){if(!submissions.length){alert('Er zijn geen inschrijvingen om te exporteren.');return;}const h=['Namen','E-mailadres','Mobiel nummer','Aanwezigheid','Aantal volwassenen','Aantal kinderen','Leeftijden kinderen','Dieetwensen','Dansvloer nummer','Datum van versturen'],q=v=>`"${String(v??'').replace(/"/g,'""')}"`,r=submissions.map(x=>[x.fullName,x.email,x.phone,x.attending,x.adults||0,x.kids||0,x.childAges?.join('; ')||'',x.dietary||'',x.songRequest||'',x.date]),csv='\uFEFF'+[h,...r].map(x=>x.map(q).join(';')).join('\n'),u=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'})),a=document.createElement('a');a.href=u;a.download=`Gastenlijst_Bruiloft_Martijn_Romy_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);}
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminModal();});
+
+    // SCROLL REVEAL INTERSECTION OBSERVER
+    document.addEventListener('DOMContentLoaded', () => {
+      const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
   </script>
 
 </body>
