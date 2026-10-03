@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="nl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Martijn & Romy gaan trouwen!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: { 50: '#FAF8F5', 100: '#F5F0EB', 200: '#E8DEC8', 300: '#D2C1A3' },
+            ocean: { 500: '#5C828D', 800: '#2A434D' },
+            terracotta: '#C87D55'
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-sand-50 text-slate-800 font-sans antialiased">
+
+  <!-- Navigatie -->
+  <nav class="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-b border-sand-200">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#" class="font-serif text-2xl font-bold tracking-wider text-ocean-800">M & R</a>
+      <div class="hidden md:flex space-x-8 text-sm font-medium">
+        <a href="#over" class="hover:text-terracotta transition">Ons Verhaal</a>
+        <a href="#programma" class="hover:text-terracotta transition">Programma</a>
+        <a href="#locatie" class="hover:text-terracotta transition">Locatie & Parkeren</a>
+        <a href="#overnachten" class="hover:text-terracotta transition">Overnachten</a>
+        <a href="#rsvp" class="hover:text-terracotta transition">RSVP</a>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button onclick="openAdminModal()" class="p-2 text-slate-500 hover:text-ocean-800 rounded-full hover:bg-sand-100 transition" title="Beheerderspaneel">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+        </button>
+        <a href="#rsvp" class="bg-ocean-800 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-ocean-500 transition">Aanmelden</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center pt-20 bg-cover bg-center" id="heroBg" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1600');">
+    <div class="text-center text-white px-4 max-w-3xl">
+      <span class="text-xs uppercase tracking-widest bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/30">Wij gaan trouwen aan zee!</span>
+      <h1 class="font-serif text-5xl md:text-7xl my-6 font-normal" id="displayNames">Martijn & Romy</h1>
+      <p class="text-lg md:text-xl font-light mb-8" id="displayDateText">Vrijdag 27 Augustus 2027 • Strandpaviljoen Zoomers, Castricum</p>
+
+      <!-- Live Aftelklok -->
+      <div class="flex justify-center space-x-3 md:space-x-6 text-center mb-10 bg-black/40 backdrop-blur-md p-4 rounded-2xl max-w-lg mx-auto border border-white/10">
+        <div><span id="days" class="font-serif text-3xl md:text-4xl font-bold block">00</span><span class="text-[10px] md:text-xs uppercase tracking-wider text-sand-200">Dagen</span></div>
+        <div class="text-2xl font-serif mt-1 opacity-50">:</div>
+        <div><span id="hours" class="font-serif text-3xl md:text-4xl font-bold block">00</span><span class="text-[10px] md:text-xs uppercase tracking-wider text-sand-200">Uren</span></div>
+        <div class="text-2xl font-serif mt-1 opacity-50">:</div>
+        <div><span id="minutes" class="font-serif text-3xl md:text-4xl font-bold block">00</span><span class="text-[10px] md:text-xs uppercase tracking-wider text-sand-200">Minuten</span></div>
+        <div class="text-2xl font-serif mt-1 opacity-50">:</div>
+        <div><span id="seconds" class="font-serif text-3xl md:text-4xl font-bold block">00</span><span class="text-[10px] md:text-xs uppercase tracking-wider text-sand-200">Sec</span></div>
+      </div>
+
+      <a href="#rsvp" class="bg-terracotta text-white px-8 py-3.5 rounded-full font-medium hover:bg-amber-700 transition inline-block">Laat weten of je komt</a>
+    </div>
+  </section>
+
+  <!-- Over Ons -->
+  <section id="over" class="py-20 px-4 max-w-4xl mx-auto text-center">
+    <i data-lucide="heart" class="w-8 h-8 text-terracotta mx-auto mb-4"></i>
+    <h2 class="font-serif text-4xl mb-6 text-ocean-800">Samen het avontuur tegemoet</h2>
+    <p class="text-slate-600 leading-relaxed text-lg mb-8" id="displayIntro">
+      Lieve familie en vrienden, wij kunnen niet wachten om onze liefde te vieren op een van onze favoriete plekjes aan de Nederlandse kust. We nodigen jullie van harte uit voor een onvergetelijke dag vol zon, zee, liefde en feest bij Strandpaviljoen Zoomers!
+    </p>
+  </section>
+
+  <!-- Programma -->
+  <section id="programma" class="py-20 bg-sand-100">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <span class="text-terracotta font-medium text-sm uppercase tracking-wider">Dagplanning</span>
+        <h2 class="font-serif text-4xl mt-2 text-ocean-800">Het Programma</h2>
+      </div>
+
+      <div class="space-y-6 relative before:absolute before:inset-0 before:left-1/2 before:-ml-px before:w-0.5 before:bg-sand-300 hidden md:block">
+        <div class="relative flex items-center justify-between group">
+          <div class="w-5/12 text-right pr-8">
+            <h3 class="font-serif text-2xl text-ocean-800">Aankomst & Ontvangst</h3>
+            <p class="text-sm text-slate-600">Welkom met koffie, thee en wat lekkers op het terras.</p>
+          </div>
+          <div class="absolute left-1/2 -translate-x-1/2 w-8 h-8 bg-terracotta text-white rounded-full flex items-center justify-center font-bold text-xs">15:00</div>
+          <div class="w-5/12 pl-8"></div>
+        </div>
+
+        <div class="relative flex items-center justify-between group">
+          <div class="w-5/12 pr-8"></div>
+          <div class="absolute left-1/2 -translate-x-1/2 w-8 h-8 bg-terracotta text-white rounded-full flex items-center justify-center font-bold text-xs">15:30</div>
+          <div class="w-5/12 pl-8">
+            <h3 class="font-serif text-2xl text-ocean-800">De Ceremonie</h3>
+            <p class="text-sm text-slate-600">Het 'ja-woord' met de voeten in het zand en zicht op de branding.</p>
+          </div>
+        </div>
+
+        <div class="relative flex items-center justify-between group">
+          <div class="w-5/12 text-right pr-8">
+            <h3 class="font-serif text-2xl text-ocean-800">Proost & Borrel</h3>
+            <p class="text-sm text-slate-600">Proosten op het bruidspaar, taart aansnijden en relaxen.</p>
+          </div>
+          <div class="absolute left-1/2 -translate-x-1/2 w-8 h-8 bg-terracotta text-white rounded-full flex items-center justify-center font-bold text-xs">16:30</div>
+          <div class="w-5/12 pl-8"></div>
+        </div>
+
+        <div class="relative flex items-center justify-between group">
+          <div class="w-5/12 pr-8"></div>
+          <div class="absolute left-1/2 -translate-x-1/2 w-8 h-8 bg-terracotta text-white rounded-full flex items-center justify-center font-bold text-xs">18:00</div>
+          <div class="w-5/12 pl-8">
+            <h3 class="font-serif text-2xl text-ocean-800">Strand BBQ & Diner</h3>
+            <p class="text-sm text-slate-600">Genieten van een uitgebreid culinair diner met zonsondergang.</p>
+          </div>
+        </div>
+
+        <div class="relative flex items-center justify-between group">
+          <div class="w-5/12 text-right pr-8">
+            <h3 class="font-serif text-2xl text-ocean-800">Swingen op het Feest</h3>
+            <p class="text-sm text-slate-600">De voetjes van de vloer met de DJ en een fantastisch feest!</p>
+          </div>
+          <div class="absolute left-1/2 -translate-x-1/2 w-8 h-8 bg-terracotta text-white rounded-full flex items-center justify-center font-bold text-xs">20:30</div>
+          <div class="w-5/12 pl-8"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Locatie & Parkeren -->
+  <section id="locatie" class="py-20">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-start">
+      <div>
+        <span class="text-terracotta font-medium text-sm uppercase tracking-wider">De Locatie</span>
+        <h2 class="font-serif text-4xl mt-2 mb-6 text-ocean-800">Strandpaviljoen Zoomers aan Zee</h2>
+        <p class="text-slate-600 mb-6 leading-relaxed">
+          Onze bruiloft vindt plaats bij het sfeervolle **Strandpaviljoen Zoomers** in Castricum aan Zee. Met uitzicht op de branding, voeten in het zand en heerlijk eten vieren we hier samen de liefde!
+        </p>
+        
+        <div class="bg-sand-100 p-6 rounded-2xl border border-sand-200 mb-6 space-y-4">
+          <div class="flex items-start gap-3">
+            <i data-lucide="map-pin" class="text-terracotta w-5 h-5 mt-1 shrink-0"></i>
+            <div>
+              <strong class="block text-slate-800">Adres</strong>
+              <span class="text-sm text-slate-600">Zeeweg 51, 1901 NZ Castricum</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <i data-lucide="car" class="text-terracotta w-5 h-5 mt-1 shrink-0"></i>
+            <div>
+              <strong class="block text-slate-800">Parkeren bij de locatie</strong>
+              <p class="text-sm text-slate-600 mt-1">
+                • <strong>Strandparkeerterrein (P aan Zee):</strong> Parkeerterrein op 50 meter van de strandopgang (betaald per inrit).<br>
+                • <strong>Gratis parkeren:</strong> Aan het begin van de duinen zijn gratis parkeerhavens.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://maps.google.com/?q=Zeeweg+51,+1901+NZ+Castricum" target="_blank" class="inline-flex items-center gap-2 border border-ocean-800 text-ocean-800 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-ocean-800 hover:text-white transition">
+          Open in Google Maps <i data-lucide="external-link" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=800" class="rounded-2xl shadow-lg w-full h-64 object-cover" alt="Strand Castricum">
+        <img src="https://images.unsplash.com/photo-1510076894288-4091a3e04d4a?auto=format&fit=crop&q=80&w=800" class="rounded-2xl shadow-lg w-full h-64 object-cover mt-8" alt="Sfeer aan zee">
+      </div>
+    </div>
+  </section>
+
+  <!-- Overnachten -->
+  <section id="overnachten" class="py-20 bg-sand-100">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <span class="text-terracotta font-medium text-sm uppercase tracking-wider">Blijven Slapen?</span>
+        <h2 class="font-serif text-4xl mt-2 text-ocean-800">Overnachten bij Zoomers</h2>
+        <p class="text-slate-600 max-w-xl mx-auto mt-2">Wil je na het feest niet meer naar huis rijden? Je kunt overnachten bij de accommodaties van Zoomers.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-sand-200 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-serif text-2xl text-ocean-800">Strandhotel Zoomers</h3>
+              <span class="text-xs bg-sand-100 text-ocean-800 font-medium px-3 py-1 rounded-full">Aan het strand</span>
+            </div>
+            <p class="text-sm text-slate-600 mb-6">Luxe hotelkamers op steenworp afstand van het strandpaviljoen.</p>
+          </div>
+          <a href="https://strandpaviljoenzoomers.nl/strandhotel-strandhuisjes/" target="_blank" class="inline-flex items-center justify-center gap-2 bg-sand-100 text-ocean-800 px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-ocean-800 hover:text-white transition w-full">
+            Bekijk Strandhotel & Strandhuisjes <i data-lucide="external-link" class="w-4 h-4"></i>
+          </a>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-sand-200 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-serif text-2xl text-ocean-800">Zoomers aan het Bos</h3>
+              <span class="text-xs bg-sand-100 text-ocean-800 font-medium px-3 py-1 rounded-full">In het duin/bos</span>
+            </div>
+            <p class="text-sm text-slate-600 mb-6">Prachtig hotel aan de rand van het Noordhollands Duinreservaat.</p>
+          </div>
+          <a href="https://zoomersaanhetbos.nl/" target="_blank" class="inline-flex items-center justify-center gap-2 bg-sand-100 text-ocean-800 px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-ocean-800 hover:text-white transition w-full">
+            Bekijk Boshotel Zoomers <i data-lucide="external-link" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dynamisch RSVP Formulier -->
+  <section id="rsvp" class="py-20 bg-ocean-800 text-white">
+    <div class="max-w-2xl mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 class="font-serif text-4xl mb-3">Aanmelden (RSVP)</h2>
+        <p class="text-ocean-100 font-light">Laat ons voor 1 juli 2027 weten of je erbij kunt zijn!</p>
+      </div>
+
+      <form id="rsvpForm" onsubmit="handleRSVPSubmit(event)" class="bg-white text-slate-800 p-8 rounded-3xl shadow-xl space-y-6">
+        <!-- Dynamische Vragen Worden Hier Geladen -->
+        <div id="dynamicFormFields" class="space-y-6"></div>
+
+        <button type="submit" class="w-full bg-terracotta text-white py-4 rounded-xl font-medium hover:bg-amber-700 transition shadow-md">Bevestiging Versturen</button>
+      </form>
+      
+      <div id="successMsg" class="hidden mt-6 p-6 bg-emerald-600 text-white rounded-2xl text-center">
+        <i data-lucide="check-circle" class="w-10 h-10 mx-auto mb-2"></i>
+        <h3 class="font-serif text-2xl font-bold">Bedankt voor je reactie!</h3>
+        <p class="text-sm mt-1">We hebben je aanmelding in goede orde ontvangen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-slate-900 text-slate-400 text-center text-sm">
+    <p class="font-serif text-xl text-white mb-2" id="footerNames">Martijn & Romy</p>
+    <p id="footerDateText">27 Augustus 2027 • Strandpaviljoen Zoomers, Castricum</p>
+    <button onclick="openAdminModal()" class="mt-4 text-xs text-slate-500 hover:text-slate-300 underline">Beheerderspaneel (Login)</button>
+  </footer>
+
+  <!-- Admin Modal -->
+  <div id="adminModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white text-slate-800 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 relative shadow-2xl">
+      <button onclick="closeAdminModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <!-- Password Login -->
+      <div id="adminLogin" class="text-center py-10 max-w-sm mx-auto">
+        <i data-lucide="lock" class="w-12 h-12 text-ocean-800 mx-auto mb-4"></i>
+        <h2 class="font-serif text-3xl font-bold mb-2">Beheerderspaneel</h2>
+        <p class="text-sm text-slate-600 mb-6">Voer het wachtwoord in (Standaard: <strong>1234</strong>)</p>
+        <input type="password" id="adminPassword" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-center font-bold tracking-widest text-lg mb-4 focus:outline-none focus:ring-2 focus:ring-ocean-500" placeholder="••••">
+        <button onclick="verifyPassword()" class="w-full bg-ocean-800 text-white py-3 rounded-xl font-medium hover:bg-ocean-500 transition">Inloggen</button>
+      </div>
+
+      <!-- Dashboard -->
+      <div id="adminDashboard" class="hidden">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b">
+          <h2 class="font-serif text-3xl font-bold text-ocean-800">Beheerders Dashboard</h2>
+          <button onclick="exportToCSV()" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-medium hover:bg-emerald-700 transition flex items-center gap-1.5">
+            <i data-lucide="download" class="w-4 h-4"></i> Exporteer Excel/CSV
+          </button>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex space-x-6 border-b border-slate-200 mb-6">
+          <button id="tabGuestsBtn" onclick="switchTab('guests')" class="pb-3 font-semibold text-ocean-800 border-b-2 border-ocean-800">Gastenlijst (<span id="guestCountBadge">0</span>)</button>
+          <button id="tabFormBtn" onclick="switchTab('form')" class="pb-3 font-semibold text-slate-400 hover:text-ocean-800">⚙️ RSVP Vragen Beheren</button>
+          <button id="tabContentBtn" onclick="switchTab('content')" class="pb-3 font-semibold text-slate-400 hover:text-ocean-800">Inhoud & Datum</button>
+        </div>
+
+        <!-- TAB 1: Gastenlijst -->
+        <div id="tabGuests">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="bg-slate-100 border-b" id="guestTableHeader">
+                  <!-- Dynamische Kolommen -->
+                </tr>
+              </thead>
+              <tbody id="guestTableBody" class="divide-y">
+                <!-- Dynamische Inschrijvingen -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: Form Builder (RSVP Vragen Beheren) -->
+        <div id="tabForm" class="hidden space-y-6">
+          <div class="bg-sand-50 p-4 rounded-2xl border border-sand-200 flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-ocean-800">Formulier Vragen Vormgeven</h3>
+              <p class="text-xs text-slate-500">Voeg vragen toe, pas de volgorde aan of maak velden verplicht.</p>
+            </div>
+            <button onclick="openAddFieldModal()" class="bg-terracotta text-white px-4 py-2 rounded-xl text-xs font-medium hover:bg-amber-700 transition flex items-center gap-1">
+              <i data-lucide="plus" class="w-4 h-4"></i> Nieuwe Vraag Toevoegen
+            </button>
+          </div>
+
+          <!-- Lijst met Actieve Vragen -->
+          <div id="builderFieldsList" class="space-y-3"></div>
+        </div>
+
+        <!-- TAB 3: Inhoud & Teksten -->
+        <div id="tabContent" class="hidden space-y-4 max-w-xl">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Namen Bruidspaar</label>
+            <input type="text" id="editNames" class="w-full px-3 py-2 border rounded-xl">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Trouwdatum & Tijd</label>
+            <input type="datetime-local" id="editDate" class="w-full px-3 py-2 border rounded-xl">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Welkomsttekst</label>
+            <textarea id="editIntro" rows="3" class="w-full px-3 py-2 border rounded-xl"></textarea>
+          </div>
+          <button onclick="saveContentSettings()" class="bg-terracotta text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-amber-700 transition">Sla Wijzigingen Op</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Default Site Config
+    let siteConfig = JSON.parse(localStorage.getItem('weddingConfig')) || {
+      names: "Martijn & Romy",
+      dateISO: "2027-08-27T15:00",
+      dateDisplay: "Vrijdag 27 Augustus 2027 • Strandpaviljoen Zoomers, Castricum",
+      intro: "Lieve familie en vrienden, wij kunnen niet wachten om onze liefde te vieren op een van onze favoriete plekjes aan de Nederlandse kust. We nodigen jullie van harte uit voor een onvergetelijke dag bij Strandpaviljoen Zoomers!"
+    };
+
+    // Standaard Dynamische Vragen (Form Builder Data)
+    let formFields = JSON.parse(localStorage.getItem('weddingFormFields')) || [
+      { id: "f_name", label: "Volledige Naam", type: "text", required: true, placeholder: "bijv. Jan Jansen", options: [] },
+      { id: "f_email", label: "E-mailadres", type: "text", required: true, placeholder: "jan@voorbeeld.nl", options: [] },
+      { id: "f_attending", label: "Aanwezigheid", type: "radio", required: true, options: ["Ja, ik ben erbij!", "Helaas verhinderd"] },
+      { id: "f_count", label: "Aantal Personen", type: "number", required: false, placeholder: "1", options: [] },
+      { id: "f_dietary", label: "Dieetwensen / Allergieën", type: "text", required: false, placeholder: "bijv. Vegetarisch", options: [] },
+      { id: "f_song", label: "Verzoeknummer voor het feest 🎵", type: "text", required: false, placeholder: "Artiest - Titel", options: [] }
+    ];
+
+    // Gasten Inschrijvingen
+    let guestSubmissions = JSON.parse(localStorage.getItem('weddingSubmissions')) || [];
+
+    // Live Aftelklok
+    let countdownInterval;
+    function startCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      function updateTimer() {
+        const targetDate = new Date(siteConfig.dateISO).getTime();
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if (diff > 0) {
+          document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+          document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+      }
+      updateTimer();
+      countdownInterval = setInterval(updateTimer, 1000);
+    }
+
+    // Render RSVP Formulier voor de Gast
+    function renderDynamicForm() {
+      const container = document.getElementById('dynamicFormFields');
+      container.innerHTML = '';
+
+      formFields.forEach(field => {
+        const wrapper = document.createElement('div');
+        const reqStar = field.required ? ' *' : '';
+        let inputHtml = '';
+
+        if (field.type === 'text' || field.type === 'number') {
+          inputHtml = `<input type="${field.type}" id="${field.id}" ${field.required ? 'required' : ''} placeholder="${field.placeholder || ''}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-ocean-500">`;
+        } else if (field.type === 'textarea') {
+          inputHtml = `<textarea id="${field.id}" ${field.required ? 'required' : ''} rows="3" placeholder="${field.placeholder || ''}" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-ocean-500"></textarea>`;
+        } else if (field.type === 'radio') {
+          inputHtml = `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">` + 
+            field.options.map((opt, i) => `
+              <label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-sand-50">
+                <input type="radio" name="${field.id}" value="${opt}" ${i === 0 ? 'checked' : ''} class="text-ocean-800">
+                <span class="ml-2 text-sm font-medium">${opt}</span>
+              </label>
+            `).join('') + `</div>`;
+        } else if (field.type === 'select') {
+          inputHtml = `<select id="${field.id}" ${field.required ? 'required' : ''} class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-ocean-500">` +
+            field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('') + `</select>`;
+        } else if (field.type === 'checkbox') {
+          inputHtml = `<label class="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-sand-50">
+              <input type="checkbox" id="${field.id}" value="Ja" class="w-5 h-5 text-ocean-800 rounded">
+              <span class="ml-3 text-sm font-medium">${field.placeholder || 'Ja'}</span>
+            </label>`;
+        }
+
+        wrapper.innerHTML = `
+          <label class="block text-sm font-medium mb-1.5">${field.label}${reqStar}</label>
+          ${inputHtml}
+        `;
+        container.appendChild(wrapper);
+      });
+    }
+
+    // Verzenden RSVP
+    function handleRSVPSubmit(e) {
+      e.preventDefault();
+      const submission = { id: Date.now(), submittedAt: new Date().toISOString(), answers: {} };
+
+      formFields.forEach(field => {
+        if (field.type === 'radio') {
+          const checked = document.querySelector(`input[name="${field.id}"]:checked`);
+          submission.answers[field.id] = checked ? checked.value : '';
+        } else if (field.type === 'checkbox') {
+          const chk = document.getElementById(field.id);
+          submission.answers[field.id] = chk && chk.checked ? 'Ja' : 'Nee';
+        } else {
+          const el = document.getElementById(field.id);
+          submission.answers[field.id] = el ? el.value : '';
+        }
+      });
+
+      guestSubmissions.push(submission);
+      localStorage.setItem('weddingSubmissions', JSON.stringify(guestSubmissions));
+
+      document.getElementById('rsvpForm').classList.add('hidden');
+      document.getElementById('successMsg').classList.remove('hidden');
+    }
+
+    // Form Builder: Lijst van vragen tonen in Beheerderspaneel
+    function renderBuilderFieldsList() {
+      const container = document.getElementById('builderFieldsList');
+      container.innerHTML = '';
+
+      formFields.forEach((field, index) => {
+        const item = document.createElement('div');
+        item.className = "p-4 bg-white border border-slate-200 rounded-xl flex justify-between items-center";
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-xs bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-lg">${field.type.toUpperCase()}</span>
+            <div>
+              <strong class="text-sm block text-slate-800">${field.label} ${field.required ? '<span class="text-rose-500">*</span>' : ''}</strong>
+              <span class="text-xs text-slate-400">${field.options.length ? 'Opties: ' + field.options.join(', ') : (field.placeholder || 'Geen extra info')}</span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="moveField(${index}, -1)" ${index === 0 ? 'disabled class="opacity-30"' : ''} class="p-1 hover:bg-slate-100 rounded">⬆️</button>
+            <button onclick="moveField(${index}, 1)" ${index === formFields.length - 1 ? 'disabled class="opacity-30"' : ''} class="p-1 hover:bg-slate-100 rounded">⬇️</button>
+            <button onclick="deleteField(${index})" class="p-1 text-rose-600 hover:bg-rose-50 rounded">🗑️</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function moveField(index, direction) {
+      const target = index + direction;
+      if (target >= 0 && target < formFields.length) {
+        const temp = formFields[index];
+        formFields[index] = formFields[target];
+        formFields[target] = temp;
+        saveFormFieldsConfig();
+      }
+    }
+
+    function deleteField(index) {
+      if (confirm('Weet je zeker dat je deze vraag wilt verwijderen uit het formulier?')) {
+        formFields.splice(index, 1);
+        saveFormFieldsConfig();
+      }
+    }
+
+    function openAddFieldModal() {
+      const label = prompt("Wat is de vraag/titel van het nieuwe veld?");
+      if (!label) return;
+
+      const type = prompt("Kies het veldtype:\n1 = Tekst\n2 = Aantal (Getal)\n3 = Keuzerondjes (Radio)\n4 = Dropdown (Selectie)\n5 = Meerregelige tekst", "1");
+      let typeStr = "text";
+      let options = [];
+
+      if (type === "2") typeStr = "number";
+      if (type === "5") typeStr = "textarea";
+      if (type === "3" || type === "4") {
+        typeStr = type === "3" ? "radio" : "select";
+        const opts = prompt("Voer de keuzemogelijkheden in (gescheiden door komma's):", "Ja, Nee");
+        if (opts) options = opts.split(',').map(s => s.trim());
+      }
+
+      const req = confirm("Is deze vraag verplicht?");
+
+      formFields.push({
+        id: "f_" + Date.now(),
+        label: label,
+        type: typeStr,
+        required: req,
+        options: options,
+        placeholder: ""
+      });
+
+      saveFormFieldsConfig();
+    }
+
+    function saveFormFieldsConfig() {
+      localStorage.setItem('weddingFormFields', JSON.stringify(formFields));
+      renderBuilderFieldsList();
+      renderDynamicForm();
+    }
+
+    // Dashboard Gastenlijst Tabel
+    function renderGuestTable() {
+      const header = document.getElementById('guestTableHeader');
+      const body = document.getElementById('guestTableBody');
+      header.innerHTML = '';
+      body.innerHTML = '';
+
+      // Kolomkoppen
+      formFields.forEach(f => {
+        const th = document.createElement('th');
+        th.className = "p-3 font-semibold text-slate-700";
+        th.innerText = f.label;
+        header.appendChild(th);
+      });
+      header.innerHTML += `<th class="p-3 font-semibold text-slate-700">Actie</th>`;
+
+      // Rijen
+      guestSubmissions.forEach(sub => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50";
+
+        formFields.forEach(f => {
+          const td = document.createElement('td');
+          td.className = "p-3 text-slate-600";
+          td.innerText = sub.answers[f.id] || '-';
+          tr.appendChild(td);
+        });
+
+        tr.innerHTML += `<td class="p-3"><button onclick="deleteSubmission(${sub.id})" class="text-rose-600 hover:underline">Verwijder</button></td>`;
+        body.appendChild(tr);
+      });
+
+      document.getElementById('guestCountBadge').innerText = guestSubmissions.length;
+    }
+
+    function deleteSubmission(id) {
+      if (confirm('Verwijderen?')) {
+        guestSubmissions = guestSubmissions.filter(s => s.id !== id);
+        localStorage.setItem('weddingSubmissions', JSON.stringify(guestSubmissions));
+        renderGuestTable();
+      }
+    }
+
+    // Admin Access & Tabs
+    function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+    function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+    function verifyPassword() {
+      if (document.getElementById('adminPassword').value === '1234') {
+        document.getElementById('adminLogin').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+        renderBuilderFieldsList();
+        renderGuestTable();
+      } else { alert('Onjuist wachtwoord! (Standaard: 1234)'); }
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tabGuests').classList.toggle('hidden', tab !== 'guests');
+      document.getElementById('tabForm').classList.toggle('hidden', tab !== 'form');
+      document.getElementById('tabContent').classList.toggle('hidden', tab !== 'content');
+    }
+
+    function exportToCSV() {
+      let csv = formFields.map(f => `"${f.label}"`).join(',') + '\n';
+      guestSubmissions.forEach(sub => {
+        csv += formFields.map(f => `"${sub.answers[f.id] || ''}"`).join(',') + '\n';
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "gastenlijst.csv";
+      link.click();
+    }
+
+    // Initialize Page
+    renderDynamicForm();
+    startCountdown();
+  </script>
+</body>
+</html>
