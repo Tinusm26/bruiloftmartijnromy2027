@@ -143,10 +143,9 @@
   </nav>
 
   <main>
-    <!-- HERO SECTIE MET VLOEIENDE OVERGANG NAAR ONDER -->
+    <!-- HERO SECTIE -->
     <section id="top" class="relative min-h-[100svh] flex items-center justify-center pt-28 pb-24 px-5 sm:px-6 overflow-hidden bg-coastal-dark text-white">
       <div class="absolute inset-0 hero-image opacity-75 transform scale-105 transition-transform duration-10000 ease-out" style="background-image: url('strand.jpg');"></div>
-      <!-- Subtiele verlooplaag die onderaan overgaat in de warme zandkleur -->
       <div class="absolute inset-0 bg-gradient-to-t from-[#F4EFEA] via-ocean-900/30 to-ocean-900/40" style="mix-blend-mode: multiply;"></div>
       <div class="absolute inset-0 bg-gradient-to-b from-ocean-900/40 via-transparent to-[#F4EFEA]"></div>
 
@@ -197,7 +196,7 @@
       </div>
     </section>
 
-    <!-- ONS VERHAAL (In warme zandkleur i.p.v. hard wit) -->
+    <!-- ONS VERHAAL -->
     <section id="ons-verhaal" class="scroll-mt-24 py-24 sm:py-32 px-5 sm:px-6 relative overflow-hidden bg-[#F4EFEA]">
       <div class="max-w-4xl mx-auto space-y-10 reveal">
         <div class="text-center space-y-4">
@@ -409,7 +408,7 @@
 
             <form id="rsvpForm" onsubmit="handleFormSubmit(event)">
               
-              <!-- STAP 1: STATUS, CONTACT & ADRES (INTERNATIONAAL) -->
+              <!-- STAP 1: STATUS, CONTACT & ADRES -->
               <div id="step1" class="space-y-6">
                 <div class="space-y-3">
                   <label class="block text-xs uppercase tracking-widest font-bold text-slate-500">Ben je erbij? / Will you attend? *</label>
@@ -442,8 +441,8 @@
                     </div>
                   </div>
 
-                  <!-- INTERNATIONAAL ADRESGEDEELTE -->
-                  <div class="pt-3 border-t border-slate-100 space-y-4">
+                  <!-- ADRESSEKTIE (Alleen zichtbaar bij aanwezigheid) -->
+                  <div id="addressSection" class="pt-3 border-t border-slate-100 space-y-4">
                     <span class="block text-xs uppercase tracking-widest font-bold text-slate-500">Adres voor trouwkaart / Postal address *</span>
                     
                     <div>
@@ -501,8 +500,8 @@
                   <button type="button" id="btnStep1Next" onclick="nextStep(2)" class="w-full bg-terracotta text-white py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-terracotta-hover transition shadow-lg hover:shadow-glow flex items-center justify-center gap-2">
                     Volgende stap: Gezelschap <i data-lucide="arrow-right" class="w-4 h-4"></i>
                   </button>
-                  <button type="submit" id="btnStep1Submit" onclick="handleFormSubmit(event)" class="hidden w-full bg-slate-800 text-white py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-900 transition shadow-lg">
-                    Verstuur afmelding
+                  <button type="submit" id="btnStep1Submit" class="hidden w-full bg-slate-800 text-white py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-900 transition shadow-lg flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> Verstuur afmelding
                   </button>
                 </div>
               </div>
@@ -586,7 +585,7 @@
             <div id="rsvpSuccess" class="hidden text-ocean-800 py-6 text-center space-y-4" role="status">
               <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner"><i data-lucide="check" class="w-8 h-8"></i></div>
               <h3 class="font-serif text-3xl text-ocean-800 font-semibold">Bedankt voor je reactie!</h3>
-              <p class="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">Je reactie en adresgegevens zijn opgeslagen. We kijken er enorm naar uit om deze dag samen te beleven!</p>
+              <p class="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">Je reactie is opgeslagen. Jammer dat je er niet bij kunt zijn, we denken aan je!</p>
               <button type="button" onclick="resetRsvpForm()" class="mt-4 text-xs font-bold uppercase tracking-wider text-terracotta underline hover:text-terracotta-hover">Nog een aanmelding versturen</button>
             </div>
 
@@ -695,6 +694,8 @@
       const n = document.getElementById('btnAttendingNo');
       const btnNext = document.getElementById('btnStep1Next');
       const btnSubmit = document.getElementById('btnStep1Submit');
+      const addressSec = document.getElementById('addressSection');
+      const wizardHdr = document.getElementById('wizardHeader');
 
       document.getElementById('attendanceInput').value = a ? 'Ja' : 'Nee';
       
@@ -703,16 +704,29 @@
         n.className = 'py-4 px-4 rounded-2xl border-2 font-bold text-sm transition flex flex-col sm:flex-row items-center justify-center gap-2 border-slate-200 text-slate-500 hover:border-slate-300';
         btnNext.classList.remove('hidden');
         btnSubmit.classList.add('hidden');
+        addressSec.classList.remove('hidden');
+        wizardHdr.classList.remove('hidden');
+        document.getElementById('street').required = true;
+        document.getElementById('houseNumber').required = true;
+        document.getElementById('postalCode').required = true;
+        document.getElementById('city').required = true;
       } else {
         y.className = 'py-4 px-4 rounded-2xl border-2 font-bold text-sm transition flex flex-col sm:flex-row items-center justify-center gap-2 border-slate-200 text-slate-500 hover:border-slate-300';
         n.className = 'py-4 px-4 rounded-2xl border-2 font-bold text-sm transition flex flex-col sm:flex-row items-center justify-center gap-2 border-rose-500 bg-rose-50 text-rose-600 shadow-sm';
         btnNext.classList.add('hidden');
         btnSubmit.classList.remove('hidden');
+        addressSec.classList.add('hidden');
+        wizardHdr.classList.add('hidden');
+        // Adresvelden niet verplicht bij afmelding
+        document.getElementById('street').required = false;
+        document.getElementById('houseNumber').required = false;
+        document.getElementById('postalCode').required = false;
+        document.getElementById('city').required = false;
       }
     }
 
     function nextStep(step) {
-      if(step > currentStep) {
+      if(step > currentStep && isAttending) {
         const name = document.getElementById('fullName').value.trim();
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
@@ -766,36 +780,38 @@
       const phone = document.getElementById('phone').value.trim();
       const country = document.getElementById('country').value;
 
-      let formattedAddress = '';
-      if(country === 'Nederland') {
-        const street = document.getElementById('street').value.trim();
-        const houseNumber = document.getElementById('houseNumber').value.trim();
-        const postalCode = document.getElementById('postalCode').value.trim();
-        const city = document.getElementById('city').value.trim();
-        formattedAddress = `${street} ${houseNumber}, ${postalCode} ${city}, Nederland`;
-      } else {
-        formattedAddress = `${document.getElementById('intlAddress').value.trim()} (${country})`;
+      let formattedAddress = '-';
+      if(isAttending) {
+        if(country === 'Nederland') {
+          const street = document.getElementById('street').value.trim();
+          const houseNumber = document.getElementById('houseNumber').value.trim();
+          const postalCode = document.getElementById('postalCode').value.trim();
+          const city = document.getElementById('city').value.trim();
+          formattedAddress = `${street} ${houseNumber}, ${postalCode} ${city}, Nederland`;
+        } else {
+          formattedAddress = `${document.getElementById('intlAddress').value.trim()} (${country})`;
+        }
       }
 
       if(!name || !email || !phone) {
-        alert('Vul alsjeblieft alle verplichte velden in.');
+        alert('Vul alsjeblieft naam, e-mail en telefoonnummer in.');
         return;
       }
 
-      const ages = Array.from(document.querySelectorAll('.child-age-input')).map(i=>i.value.trim());
+      const ages = isAttending ? Array.from(document.querySelectorAll('.child-age-input')).map(i=>i.value.trim()) : [];
       
       const entry = {
         full_name: name,
         email: email,
         phone: phone,
         street: formattedAddress,
-        house_number: country,
+        house_number: isAttending ? country : 'Nee (Verhinderd)',
         postal_code: '-',
         city: '-',
         attending: isAttending ? 'Ja' : 'Nee',
         adults: isAttending ? adultsCount : 0,
         kids: isAttending ? kidsCount : 0,
-        child_ages: isAttending ? ages : [],
+        child_ages: ages,
         dietary: isAttending ? (document.getElementById('dietary').value.trim() || '-') : '-',
         song_request: isAttending ? (document.getElementById('songRequest').value.trim() || '-') : '-'
       };
@@ -841,11 +857,11 @@
     async function adminLogout(){await supabaseClient.auth.signOut();submissions=[];document.getElementById('adminDashboardView').classList.add('hidden');document.getElementById('adminLoginView').classList.remove('hidden');document.getElementById('adminPassword').value='';}
     function mapSubmission(r){return{id:r.id,fullName:r.full_name,email:r.email,phone:r.phone,address:r.street||'-',country:r.house_number||'Nederland',attending:r.attending,adults:r.adults,kids:r.kids,childAges:Array.isArray(r.child_ages)?r.child_ages:[],dietary:r.dietary,songRequest:r.song_request,date:r.created_at?new Date(r.created_at).toLocaleString('nl-NL',{dateStyle:'short',timeStyle:'short'}):'-'};}
     
-    async function loadSubmissions(){const t=document.getElementById('adminTableBody');t.innerHTML='<tr><td colspan="10" class="p-8 text-center text-slate-400">Gastenlijst wordt geladen...</td></tr>';const{data,error}=`...`;} // (beheerdersfuncties intact)
+    async function loadSubmissions(){const t=document.getElementById('adminTableBody');t.innerHTML='<tr><td colspan="10" class="p-8 text-center text-slate-400">Gastenlijst wordt geladen...</td></tr>';const{data,error}=await supabaseClient.from('rsvp_submissions').select('id, created_at, full_name, email, phone, street, house_number, postal_code, city, attending, adults, kids, child_ages, dietary, song_request').order('created_at',{ascending:false});if(error){t.innerHTML=`<tr><td colspan="10" class="p-8 text-center text-rose-600">Laden is niet gelukt: ${escapeHtml(error.message)}</td></tr>`;return;}submissions=(data||[]).map(mapSubmission);renderAdminTable();}
     function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-    function renderAdminTable(){/* ... */}
-    async function deleteSubmission(id){/* ... */}
-    function exportToCSV(){/* ... */}
+    function renderAdminTable(){const q=document.getElementById('adminSearch').value.toLowerCase(),f=document.getElementById('adminFilter').value,t=document.getElementById('adminTableBody'),a=submissions.filter(x=>x.attending==='Ja');document.getElementById('statAdults').textContent=a.reduce((s,x)=>s+Number(x.adults||0),0);document.getElementById('statKids').textContent=a.reduce((s,x)=>s+Number(x.kids||0),0);document.getElementById('statTotalGuests').textContent=a.reduce((s,x)=>s+Number(x.adults||0)+Number(x.kids||0),0);document.getElementById('statSongs').textContent=a.filter(x=>x.songRequest&&x.songRequest!=='-').length;document.getElementById('statDeclines').textContent=submissions.filter(x=>x.attending==='Nee').length;const d=submissions.filter(x=>[x.fullName,x.email,x.address].some(v=>String(v||'').toLowerCase().includes(q))&&(f==='all'||f==='attending'&&x.attending==='Ja'||f==='declined'&&x.attending==='Nee'));if(!d.length){t.innerHTML='<tr><td colspan="10" class="p-8 text-center text-slate-400">Geen inzendingen gevonden.</td></tr>';return;}t.innerHTML=d.map(x=>{const b=x.attending==='Ja'?'<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">Aanwezig</span>':'<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold text-[10px]">Afgemeld</span>',ag=x.childAges?.length?x.childAges.map(v=>`${escapeHtml(v)} jr`).join(', '):'-',c=x.attending==='Ja'?`${Number(x.adults||0)} volw. / ${Number(x.kids||0)} kind.`:'-';return `<tr class="hover:bg-sand-50/60 transition"><td class="p-3.5">${b}</td><td class="p-3.5 font-semibold text-ocean-800">${escapeHtml(x.fullName)}</td><td class="p-3.5 text-slate-600">${escapeHtml(x.address)}</td><td class="p-3.5 text-slate-600">${escapeHtml(x.email)}<br><span class="text-[10px] text-slate-400">${escapeHtml(x.phone)}</span></td><td class="p-3.5">${c}</td><td class="p-3.5 text-slate-500">${ag}</td><td class="p-3.5 text-slate-500 max-w-xs truncate">${escapeHtml(x.dietary||'-')}</td><td class="p-3.5 text-terracotta font-medium">${escapeHtml(x.songRequest||'-')}</td><td class="p-3.5 text-slate-400 text-[10px]">${escapeHtml(x.date)}</td><td class="p-3.5 text-right"><button type="button" onclick="deleteSubmission(${Number(x.id)})" class="p-1.5 text-slate-400 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;}).join('');initializeIcons();}
+    async function deleteSubmission(id){if(!confirm('Weet je zeker dat je deze inzending wilt verwijderen?'))return;const{error}=await supabaseClient.from('rsvp_submissions').delete().eq('id',id);if(error){alert(`Verwijderen is niet gelukt: ${error.message}`);return;}submissions=submissions.filter(x=>Number(x.id)!==Number(id));renderAdminTable();}
+    function exportToCSV(){if(!submissions.length){alert('Er zijn geen inschrijvingen om te exporteren.');return;}let h=['Namen','Volledig Adres','E-mailadres','Mobiel nummer','Aanwezigheid','Aantal volwassenen','Aantal kinderen','Leeftijden kinderen','Dieetwensen','Dansvloer nummer','Datum van versturen'],q=v=>`"${String(v??'').replace(/"/g,'""')}"`,r=submissions.map(x=>[x.fullName,x.address,x.email,x.phone,x.attending,x.adults||0,x.kids||0,x.childAges?.join('; ')||'',x.dietary||'',x.songRequest||'',x.date]),csv='\uFEFF'+[h,...r].map(x=>x.map(q).join(';')).join('\n'),u=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'})),a=document.createElement('a');a.href=u;a.download=`Gastenlijst_Bruiloft_Martijn_Romy_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);}
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminModal();});
 
     document.addEventListener('DOMContentLoaded', () => {
