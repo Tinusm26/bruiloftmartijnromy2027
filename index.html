@@ -1119,27 +1119,36 @@
       const phone = document.getElementById('phone').value.trim();
       const country = document.getElementById('country').value;
 
-      let formattedAddress = '-';
+      // Correcte variabelen per kolom op basis van je database-tabel
+      let streetVal = '-';
+      let houseNumberVal = '-';
+      let postalCodeVal = '-';
+      let cityVal = '-';
+
       if(isAttending) {
         if(country === 'Nederland') {
-          const street = document.getElementById('street').value.trim();
-          const houseNumber = document.getElementById('houseNumber').value.trim();
-          const postalCode = document.getElementById('postalCode').value.trim();
-          const city = document.getElementById('city').value.trim();
-          formattedAddress = `${street} ${houseNumber}, ${postalCode} ${city}, Nederland`;
+          streetVal = document.getElementById('street').value.trim();
+          houseNumberVal = document.getElementById('houseNumber').value.trim();
+          postalCodeVal = document.getElementById('postalCode').value.trim();
+          cityVal = document.getElementById('city').value.trim();
         } else {
-          formattedAddress = `${document.getElementById('intlAddress').value.trim()} (${country})`;
+          streetVal = document.getElementById('intlAddress').value.trim();
+          houseNumberVal = country;
+          postalCodeVal = '-';
+          cityVal = '-';
         }
+      } else {
+        houseNumberVal = 'Nee (Verhinderd)';
       }
 
       const entry = {
         full_name: name,
         email: email,
         phone: phone,
-        street: formattedAddress,
-        house_number: isAttending ? country : 'Nee (Verhinderd)',
-        postal_code: '-',
-        city: '-',
+        street: streetVal,
+        house_number: houseNumberVal,
+        postal_code: postalCodeVal,
+        city: cityVal,
         attending: isAttending ? 'Ja' : 'Nee',
         adults: isAttending ? adultsCount : 0,
         kids: isAttending ? kidsCount : 0,
