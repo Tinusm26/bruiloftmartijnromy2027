@@ -1202,7 +1202,33 @@
     
     async function verifyAdminPassword(e){e.preventDefault();const x=document.getElementById('adminError');x.classList.add('hidden');const{error}=await supabaseClient.auth.signInWithPassword({email:document.getElementById('adminEmail').value.trim(),password:document.getElementById('adminPassword').value});if(error){x.textContent='Inloggen is niet gelukt. Controleer e-mailadres en wachtwoord.';x.classList.remove('hidden');return;}document.getElementById('adminLoginView').classList.add('hidden');document.getElementById('adminDashboardView').classList.remove('hidden');await loadSubmissions();}
     async function adminLogout(){await supabaseClient.auth.signOut();submissions=[];document.getElementById('adminDashboardView').classList.add('hidden');document.getElementById('adminLoginView').classList.remove('hidden');document.getElementById('adminPassword').value='';}
-    function mapSubmission(r){return{id:r.id,fullName:r.full_name,email:r.email,phone:r.phone,address:r.street||'-',country:r.house_number||'Nederland',attending:r.attending,adults:r.adults,kids:r.kids,childAges:Array.isArray(r.child_ages)?r.child_ages:[],dietary:r.dietary,songRequest:r.song_request,date:r.created_at?new Date(r.created_at).toLocaleString('nl-NL',{dateStyle:'short',timeStyle:'short'}):'-'};}
+    function mapSubmission(r){
+      let fullAddress = '-';
+      if (r.attending === 'Ja') {
+        // Controleer of de losse adresvelden zijn ingevuld, anders val terug op de oude kolom
+        if (r.postal_code && r.postal_code !== '-') {
+          fullAddress = `${r.street || ''} ${r.house_number || ''}, ${r.postal_code || ''} ${r.city || ''}`.trim();
+        } else {
+          fullAddress = r.street || '-';
+        }
+      }
+
+      return {
+        id: r.id,
+        fullName: r.full_name,
+        email: r.email,
+        phone: r.phone,
+        address: fullAddress,
+        country: r.house_number || 'Nederland',
+        attending: r.attending,
+        adults: r.adults,
+        kids: r.kids,
+        child_ages: Array.isArray(r.child_ages)? r.child_ages : [],
+        dietary: r.dietary,
+        songRequest: r.song_request,
+        date: r.created_at ? new Date(r.created_at).toLocaleString('nl-NL',{dateStyle:'short',timeStyle:'short'}) : '-'
+      };
+    }
     
     async function loadSubmissions(){const t=document.getElementById('adminTableBody');t.innerHTML='<tr><td colspan="10" class="p-8 text-center text-slate-400">Gastenlijst wordt geladen...</td></tr>';const{data,error}=await supabaseClient.from('rsvp_submissions').select('id, created_at, full_name, email, phone, street, house_number, postal_code, city, attending, adults, kids, child_ages, dietary, song_request').order('created_at',{ascending:false});if(error){t.innerHTML=`<tr><td colspan="10" class="p-8 text-center text-rose-600">Laden is niet gelukt: ${escapeHtml(error.message)}</td></tr>`;return;}submissions=(data||[]).map(mapSubmission);renderAdminTable();}
     function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
